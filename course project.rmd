@@ -60,6 +60,13 @@ train_control <- trainControl(method = "cv", number = 10)
 model_rf <- train(classe ~ ., data =  trainset, trControl = train_control, 
                    method = "rf")
 ```
+check accurace and sample error
+
+```{r, echo=T}
+predict_rf <- predict(model_rf)
+confusionMatrix(predict_rf, trainset$classe)
+```
+as we can see the accurace is more than 100% and the error rate is 0% with using cross validation.
 
 ## 6- check model accuracy on validation set
 
@@ -67,5 +74,12 @@ model_rf <- train(classe ~ ., data =  trainset, trControl = train_control,
 predict_rf_v <- predict(model_rf, validateset)
 confusionMatrix(predict_rf_v, validateset$classe)
 ```
+as we can see the accurace is more than 99.85% on validation set and the error rate is 0.15%.
 
-as we can see the accurace is more than 99.85% on validation set.
+## 7- predict testing data
+
+```{r, echo=T}
+predict_rf_quiz <- predict(model_rf, testdata)
+final_output <- data.frame(testdata[,54], predict_rf_quiz)
+final_output
+```

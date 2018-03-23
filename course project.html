@@ -169,6 +169,41 @@ validateset &lt;- traindata[-inTrain,]</code></pre>
 <h2>5- using random forset</h2>
 <pre class="r"><code>model_rf &lt;- train(classe ~ ., data =  trainset, trControl = train_control, 
                    method = &quot;rf&quot;)</code></pre>
+<p>check accurace and sample error</p>
+<pre class="r"><code>predict_rf &lt;- predict(model_rf)
+confusionMatrix(predict_rf, trainset$classe)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 4464    0    0    0    0
+##          B    0 3038    0    0    0
+##          C    0    0 2738    0    0
+##          D    0    0    0 2573    0
+##          E    0    0    0    0 2886
+## 
+## Overall Statistics
+##                                      
+##                Accuracy : 1          
+##                  95% CI : (0.9998, 1)
+##     No Information Rate : 0.2843     
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+##                                      
+##                   Kappa : 1          
+##  Mcnemar's Test P-Value : NA         
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Prevalence             0.2843   0.1935   0.1744   0.1639   0.1838
+## Detection Rate         0.2843   0.1935   0.1744   0.1639   0.1838
+## Detection Prevalence   0.2843   0.1935   0.1744   0.1639   0.1838
+## Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</code></pre>
+<p>as we can see the accurace is more than 100% and the error rate is 0% with using cross validation.</p>
 </div>
 <div id="check-model-accuracy-on-validation-set" class="section level2">
 <h2>6- check model accuracy on validation set</h2>
@@ -205,7 +240,34 @@ confusionMatrix(predict_rf_v, validateset$classe)</code></pre>
 ## Detection Rate         0.2845   0.1922   0.1744   0.1639   0.1835
 ## Detection Prevalence   0.2852   0.1922   0.1749   0.1642   0.1835
 ## Balanced Accuracy      0.9995   0.9967   0.9997   0.9998   0.9993</code></pre>
-<p>as we can see the accurace is more than 99.85% on validation set.</p>
+<p>as we can see the accurace is more than 99.85% on validation set and the error rate is 0.15%.</p>
+</div>
+<div id="predict-testing-data" class="section level2">
+<h2>7- predict testing data</h2>
+<pre class="r"><code>predict_rf_quiz &lt;- predict(model_rf, testdata)
+final_output &lt;- data.frame(testdata[,54], predict_rf_quiz)
+final_output</code></pre>
+<pre><code>##    testdata...54. predict_rf_quiz
+## 1               1               B
+## 2               2               A
+## 3               3               B
+## 4               4               A
+## 5               5               A
+## 6               6               E
+## 7               7               D
+## 8               8               B
+## 9               9               A
+## 10             10               A
+## 11             11               B
+## 12             12               C
+## 13             13               B
+## 14             14               A
+## 15             15               E
+## 16             16               E
+## 17             17               A
+## 18             18               B
+## 19             19               B
+## 20             20               B</code></pre>
 </div>
 
 
