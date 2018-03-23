@@ -1,0 +1,71 @@
+---
+title: "course 8 project"
+author: "Mohamed Elabady"
+date: "March 23, 2018"
+output: html_document
+---
+
+## Background
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://web.archive.org/web/20161224072740/http:/groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
+
+## 1. Load data
+
+setting set, load caret libraray and data
+```{r loading, eval=T}
+library(caret)
+set.seed(123)
+traindata <- read.csv("./pml-training.csv")
+testdata <- read.csv("./pml-testing.csv")
+```
+
+## 2- cleaning data
+cleaining unecassary column which are index, username and times columns
+```{r}
+traindata <- traindata[, -c(1:5)]
+testdata <- testdata[, -c(1:5)]
+```
+
+then replacing NA values with empty fielda.
+```{r, echo=T}
+traindata[is.na(traindata)] <- ""
+testdata[is.na(testdata)] <- ""
+```
+
+then we will remove predictors with near zero varaiance
+```{r, echo=T}
+zerovar <- nearZeroVar(traindata)
+traindata <- traindata[, -zerovar]
+testdata <- testdata[, -zerovar]
+```
+
+## 3- split training data to training and validation sets
+
+we will train with 80% of the data and keep the other 20% for validation
+```{r, echo=T}
+inTrain <- createDataPartition(y=traindata$classe,p=0.8, list=FALSE)
+trainset <- traindata[inTrain,]
+validateset <- traindata[-inTrain,]
+```
+
+## 4- cross validation
+using kfold cross validation with k = 10
+```{r, echo=T}
+train_control <- trainControl(method = "cv", number = 10)
+```
+
+## 5- using random forset
+
+```{r, echo=T}
+model_rf <- train(classe ~ ., data =  trainset, trControl = train_control, 
+                   method = "rf")
+```
+
+## 6- check model accuracy on validation set
+
+```{r, echo=T}
+predict_rf_v <- predict(model_rf, validateset)
+confusionMatrix(predict_rf_v, validateset$classe)
+```
+
+as we can see the accurace is more than 99.85% on validation set.
