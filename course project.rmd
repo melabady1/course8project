@@ -66,7 +66,7 @@ check accurace and sample error
 predict_rf <- predict(model_rf)
 confusionMatrix(predict_rf, trainset$classe)
 ```
-as we can see the accurace is more than 100% and the error rate is 0% with using cross validation.
+as we can see the accurace is 100% and the error rate is 0% with using cross validation.
 
 ## 6- check model accuracy on validation set
 
@@ -74,7 +74,7 @@ as we can see the accurace is more than 100% and the error rate is 0% with using
 predict_rf_v <- predict(model_rf, validateset)
 confusionMatrix(predict_rf_v, validateset$classe)
 ```
-as we can see the accurace is more than 99.85% on validation set and the error rate is 0.15%.
+as we can see the accurace is 99.85% on validation set and the error rate is 0.15%.
 
 ## 7- predict testing data
 
