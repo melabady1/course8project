@@ -78,7 +78,7 @@ as we can see the accurace is 99.85% on validation set and the error rate is 0.1
 
 ## 7- predict testing data
 
-```{r, echo=T}
+```{r, echo=T, eval = F}
 predict_rf_quiz <- predict(model_rf, testdata)
 final_output <- data.frame(testdata[,54], predict_rf_quiz)
 final_output
